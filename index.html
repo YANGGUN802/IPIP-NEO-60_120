@@ -198,14 +198,18 @@ $("#bk").onclick=()=>{if(i&&!lock)setAct(i-1)};
 addEventListener("keydown",e=>{if($("#test").hidden)return;if(/^[1-5]$/.test(e.key))ans(+e.key);else if(e.key=="Backspace"||e.key=="ArrowLeft")$("#bk").click()});
 $("#rt").onclick=()=>{document.body.className="";show("intro")};
 function toast(t){const e=$("#toast");e.textContent=t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>e.hidden=true,2400)}
-async function share(){const u=location.href.split(/[?#]/)[0];try{if(navigator.share){await navigator.share({title:"나의 성격 알아보기 | Big Five 모델 검사",text:"간편형: 60문항 / 정식형: 120문항",url:u});return}}catch(e){if(e&&e.name=="AbortError")return}try{await navigator.clipboard.writeText(u);toast("링크를 복사했어요. 붙여넣어 공유해 보세요.")}catch(e){prompt("아래 링크를 복사해 공유하세요",u)}}
+async function share(){const u=location.href.split(/[?#]/)[0];try{if(isMob()&&navigator.share){await navigator.share({title:"나의 성격 알아보기 | Big Five 모델 검사",text:"간편형: 60문항 / 정식형: 120문항",url:u});return}}catch(e){if(e&&e.name=="AbortError")return}try{await navigator.clipboard.writeText(u);toast("링크를 복사했어요. 붙여넣어 공유해 보세요.")}catch(e){prompt("아래 링크를 복사해 공유하세요",u)}}
 $$(".sh").forEach(b=>b.onclick=share);
 const rr=(g,x,y,w,h,r)=>{g.beginPath();g.roundRect?g.roundRect(x,y,w,h,r):g.rect(x,y,w,h)};
+const isMob=()=>/Android|iPhone|iPad|iPod/i.test(navigator.userAgent||"")||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform||""));
+const wrap=(m,t,w)=>{const o=[];let l="";for(const ch of t){if(l&&m.measureText(l+ch).width>w){if(ch==" "){o.push(l);l="";continue}const i=l.lastIndexOf(" ");if(i>0){o.push(l.slice(0,i));l=l.slice(i+1)+ch}else{o.push(l);l=ch}}else l+=ch}if(l)o.push(l);return o};
 async function saveImg(){
-const n=SEL.length,TXT="IPIP-NEO 성격 검사 나의 성격 유형 차트 높음 보통 낮음 점 자기이해 참고용 임상 진단이 아닙니다 by JUNE 0123456789"+D.map(d=>d[1]).join("");
+const n=SEL.length,TXT="IPIP-NEO 성격 검사 나의 성격 유형 차트 결과 및 해석 높음 보통 낮음 점 자기이해 참고용 임상 진단이 아닙니다 간편형은 하위척도 점수의 신뢰도가 낮아 영역 중심으로 참고하세요 by JUNE 0123456789"+D.map(d=>d[1]).join("")+Object.values(DX).flat().join("");
 try{await Promise.all([document.fonts.load('700 40px "Noto Sans KR"',TXT),document.fonts.load('400 30px "Noto Sans KR"',TXT)])}catch(e){}
-const W=1080,H=1580,cv=document.createElement("canvas");cv.width=W;cv.height=H;const g=cv.getContext("2d"),F=(w,s)=>`${w} ${s}px "Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif`;
-const CC={N:"#e05b5b",E:"#f29b2f",O:"#9b6be0",A:"#35a86f",C:"#3a86d6"},P=D.map(d=>P100(d[0]));
+const W=1080,F=(w,s)=>`${w} ${s}px "Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif`;
+const CC={N:"#e05b5b",E:"#f29b2f",O:"#9b6be0",A:"#35a86f",C:"#3a86d6"},P=D.map(d=>P100(d[0])),m=document.createElement("canvas").getContext("2d");m.font=F(400,28);
+const T=D.map(d=>wrap(m,DX[d[0]][lv(DT[d[0]]/(6*K))],880)),CH=T.map(t=>148+(t.length-1)*44+36),yE=1000+CH.reduce((a,b)=>a+b+24,0),H=yE+34+98+(K==2?36:0)+60;
+const cv=document.createElement("canvas");cv.width=W;cv.height=H;const g=cv.getContext("2d");
 g.fillStyle="#faf9f6";g.fillRect(0,0,W,H);
 const gr=g.createLinearGradient(60,0,W-60,0);gr.addColorStop(0,"#2f6f6a");gr.addColorStop(1,"#3a86d6");g.fillStyle=gr;rr(g,60,60,W-120,190,28);g.fill();
 g.textAlign="center";g.fillStyle="#fff";g.font=F(700,58);g.fillText(`IPIP-NEO-${n} 성격 검사`,W/2,150);g.font=F(400,30);g.fillText("나의 성격 유형 차트",W/2,205);
@@ -215,10 +219,20 @@ D.forEach((_,i)=>{const[x,y]=pt(i,R);g.beginPath();g.moveTo(cx,cy);g.lineTo(x,y)
 g.beginPath();P.forEach((v,i)=>{const[x,y]=pt(i,R*Math.max(v,4)/100);i?g.lineTo(x,y):g.moveTo(x,y)});g.closePath();g.fillStyle="rgba(47,111,106,.2)";g.fill();g.strokeStyle="#2f6f6a";g.lineWidth=4;g.lineJoin="round";g.stroke();
 P.forEach((v,i)=>{const[x,y]=pt(i,R*Math.max(v,4)/100);g.beginPath();g.arc(x,y,11,0,7);g.fillStyle=CC[D[i][0]];g.fill();g.strokeStyle="#fff";g.lineWidth=4;g.stroke()});
 D.forEach((d,i)=>{const[x,y]=pt(i,R+62);g.textAlign="center";g.fillStyle=CC[d[0]];g.font=F(700,34);g.fillText(dk(d[1]),x,y);g.fillStyle="#22262b";g.font=F(700,40);g.fillText(P[i],x,y+44)});
-D.forEach((d,i)=>{const c=d[0],y=950+i*104,L=NM[lv(DT[c]/(6*K))];g.textAlign="left";g.fillStyle="#22262b";g.font=F(700,38);g.fillText(dk(d[1]),100,y);const w=g.measureText(dk(d[1])).width;g.fillStyle="#667";g.font=F(400,28);g.fillText(L,100+w+18,y);g.textAlign="right";g.fillStyle=CC[c];g.font=F(700,46);g.fillText(P[i],940,y);g.fillStyle="#667";g.font=F(400,26);g.fillText("점",980,y);g.fillStyle="#e6e3dc";rr(g,100,y+16,880,18,9);g.fill();g.fillStyle=CC[c];rr(g,100,y+16,Math.max(880*P[i]/100,18),18,9);g.fill()});
-g.textAlign="center";g.fillStyle="#667";g.font=F(700,32);g.fillText("[by JUNE]",W/2,1470);g.font=F(400,24);g.fillText(location.host+location.pathname.replace(/index\.html$/,""),W/2,1512);g.fillText("자기이해·참고용 검사이며 임상 진단이 아닙니다.",W/2,1548);
+g.fillStyle="#d6ebe8";rr(g,W/2-190,880,380,68,34);g.fill();g.fillStyle="#22262b";g.textAlign="center";g.font=F(700,34);g.fillText("결과 및 해석",W/2,925);
+let y=1000;D.forEach((d,i)=>{const c=d[0],h=CH[i],L=NM[lv(DT[c]/(6*K))];
+g.fillStyle="#fff";rr(g,60,y,960,h,24);g.fill();g.strokeStyle="#e6e3dc";g.lineWidth=2;g.stroke();
+g.fillStyle=CC[c];g.beginPath();g.arc(112,y+50,10,0,7);g.fill();
+g.textAlign="left";g.fillStyle="#22262b";g.font=F(700,38);g.fillText(dk(d[1]),136,y+64);const w=g.measureText(dk(d[1])).width;g.fillStyle="#667";g.font=F(400,28);g.fillText(L,136+w+18,y+64);
+g.textAlign="right";g.fillStyle=CC[c];g.font=F(700,46);g.fillText(P[i],940,y+64);g.fillStyle="#667";g.font=F(400,26);g.fillText("점",980,y+64);
+g.fillStyle="#e6e3dc";rr(g,100,y+84,880,18,9);g.fill();g.fillStyle=CC[c];rr(g,100,y+84,Math.max(880*P[i]/100,18),18,9);g.fill();
+g.textAlign="left";g.fillStyle="#3a3f47";g.font=F(400,28);T[i].forEach((t,k)=>g.fillText(t,100,y+148+k*44));
+y+=h+24});
+const fy=y+34;g.textAlign="center";g.fillStyle="#667";g.font=F(700,32);g.fillText("[by JUNE]",W/2,fy+20);g.font=F(400,24);g.fillText(location.host+location.pathname.replace(/index\.html$/,""),W/2,fy+62);let ln=fy+98;
+if(K==2){g.fillText("간편형은 하위척도 점수의 신뢰도가 낮아 영역 점수 중심으로 참고하세요.",W/2,ln);ln+=36}
+g.fillText("자기이해·참고용 검사이며 임상 진단이 아닙니다.",W/2,ln);
 cv.toBlob(async b=>{const f=new File([b],`IPIP-NEO-${n}-result.png`,{type:"image/png"});
-try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:"내 성격 검사 결과"});return}}catch(e){if(e&&e.name=="AbortError")return}
+try{if(isMob()&&navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:"내 성격 검사 결과"});return}}catch(e){if(e&&e.name=="AbortError")return}
 const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=f.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);toast("이미지를 저장했어요.")},"image/png")}
 $("#si").onclick=saveImg;
 const sc=n=>Q[n].k=="+"?A[n]:6-A[n];
