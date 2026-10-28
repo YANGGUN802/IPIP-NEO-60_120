@@ -108,12 +108,19 @@ body.rs{--bg:#faf9f6;--card:#fff;--tx:#22262b;--mu:#667;--ln:#dcd9d2;--ac:#2f6f6
 .ghost{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:15px;border-radius:999px;border:1.5px solid var(--ln);background:#fff;font-weight:700}
 #toast{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#171a2ee6;color:#fff;padding:12px 18px;border-radius:999px;font-size:14px;z-index:20;max-width:calc(100% - 32px);text-align:center}
 #res .by{text-align:center;font-weight:700;color:var(--mu);margin:20px 0 8px}
+.iab{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:14px;background:#fff3e0;border:1px solid #f1d3a5;font-size:13.5px;line-height:1.5;color:#6b4a14}
+.iab button{flex:none;background:var(--ink);color:#fff;border-radius:999px;padding:9px 14px;font-weight:700;font-size:13px}
+#ov{position:fixed;inset:0;z-index:30;background:#faf9f6;overflow:auto;-webkit-overflow-scrolling:touch}
+#ov .ob{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 14px;background:#171a2e;color:#fff;font-size:14px}
+#ov .ob button{background:#fff;color:#171a2e;border-radius:999px;padding:8px 16px;font-weight:700}
+#ov img{display:block;width:100%;max-width:720px;margin:0 auto}
 @page{size:A4;margin:9mm}
 @media print{body.rs{--bg:#fff;--card:#fff;--tx:#1d2125;--mu:#555;--ln:#cfcfcf;--ac2:#e3efed;font-size:9.5pt;line-height:1.35}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}#res{max-width:none;padding:0;min-height:0}#res button,#res .nosh{display:none}#res h1{font-size:14pt;padding:6px 10px;margin:0 0 3mm}#res h2{padding:3px 14px;margin:3mm auto 1mm}#res h2{font-size:11.5pt;margin:2mm 0 1mm;break-after:avoid}#res .d{padding:6px 9px;margin:5px 0;break-inside:avoid}#res .d p,#res .note{font-size:8.5pt}#res .ov{display:grid;grid-template-columns:300px 1fr;align-items:center;gap:8px}#res .ov svg{max-width:300px!important}#res .ov .lg{flex-direction:column;align-items:flex-start}#res .dm{display:grid;grid-template-columns:265px 1fr;gap:10px;align-items:start}#res .dm .dl svg{max-width:265px!important}#res .dm .it{font-size:8.3pt}#res .t{height:8px}#res .nl{padding:6px 9px;font-size:8.5pt;margin:2px 0}#res .nl li{margin:2px 0}#res .ovc{display:grid;grid-template-columns:300px 1fr;column-gap:8px;align-items:center}#res .ovc>h3{grid-column:1/-1}#res .ovc .ov{display:block;grid-column:1;grid-row:2}#res .ovc .lg{grid-column:2;grid-row:2;flex-direction:column;align-items:flex-start;justify-content:center;font-size:9.5pt;gap:4px;margin:0}}
 </style>
 </head>
 <body>
 <section id="intro">
+<div class="iab" hidden><span>카카오톡 같은 앱 안에서는 PDF 저장 등 일부 기능이 막혀 있어요. 기본 브라우저(Chrome, Safari)에서 열면 모두 쓸 수 있어요.</span><button id="ex">기본 브라우저로 열기</button></div>
 <div class="orb" aria-hidden="true"><i style="--k:0;--c:var(--N)"></i><i style="--k:1;--c:var(--E)"></i><i style="--k:2;--c:var(--O)"></i><i style="--k:3;--c:var(--A)"></i><i style="--k:4;--c:var(--C)"></i></div>
 <div><h1>다섯 가지 축으로 읽는 나</h1></div>
 <div class="trust"><b>심리학계에서 가장 널리 쓰이는 성격 모델, Big Five(5요인) 검사</b><span>학술 연구에서 널리 검증·활용된 공개 검사(IPIP-NEO) · NEO PI-R과 같은 5개 영역·30개 하위척도를 측정합니다.</span></div>
@@ -133,11 +140,12 @@ body.rs{--bg:#faf9f6;--card:#fff;--tx:#22262b;--mu:#667;--ln:#dcd9d2;--ac:#2f6f6
 <section id="res" hidden>
 <h1>IPIP-NEO 성격 검사</h1>
 <div id="out"></div>
-<button id="si"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="margin-right:6px;vertical-align:-4px"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>내 결과 이미지로 저장</button><button class="sh"><svg class="ic" style="margin-right:6px;vertical-align:-4px" viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/></svg>검사 링크 공유하기</button><button onclick="print()">인쇄 / PDF 저장</button><button class="s" id="rt">처음부터</button>
+<button id="si"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="margin-right:6px;vertical-align:-4px"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>내 결과 이미지로 저장</button><button class="sh"><svg class="ic" style="margin-right:6px;vertical-align:-4px" viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/></svg>검사 링크 공유하기</button><button id="pf">인쇄 / PDF 저장</button><button class="s" id="rt">처음부터</button>
 <p class="note nosh">공유하면 이 검사의 링크만 전달되며, 내 결과는 공유되지 않습니다.</p>
 <p class="note">※ NEO PI-R 자체가 아니라 그것을 대체하도록 만든 공개 검사이며, 규준표(백분위)가 없어 점수는 원점수와 비율로만 표시됩니다. 자기이해·참고용이며 임상 진단이나 선발 목적으로 사용할 수 없습니다.</p>
 <p class="by">[by JUNE]</p>
 </section>
+<div id="ov" hidden><div class="ob"><span>이미지를 <b>길게 눌러</b> 저장하거나 공유하세요.</span><button id="ovc">닫기</button></div><img id="ovi" alt="내 성격 검사 결과"></div>
 <div id="toast" role="status" hidden></div>
 <script>
 const D=[["N","신경성 Neuroticism","Anxiety 불안,Anger 분노,Depression 우울,Self-Consciousness 자의식,Immoderation 충동성,Vulnerability 스트레스 취약성"],
@@ -199,10 +207,11 @@ $$(".row button").forEach(b=>b.onclick=()=>ans(+b.value));
 $("#bk").onclick=()=>{if(i&&!lock)setAct(i-1)};
 addEventListener("keydown",e=>{if($("#test").hidden)return;if(/^[1-5]$/.test(e.key))ans(+e.key);else if(e.key=="Backspace"||e.key=="ArrowLeft")$("#bk").click()});
 $("#rt").onclick=()=>{document.body.className="";show("intro")};
-function toast(t){const e=$("#toast");e.textContent=t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>e.hidden=true,2400)}
+function toast(t,ms){const e=$("#toast");e.textContent=t;e.hidden=false;clearTimeout(toast.t);if(ms!==0)toast.t=setTimeout(()=>e.hidden=true,ms||2400)}
 async function share(){const u=location.href.split(/[?#]/)[0];try{if(isMob()&&navigator.share){await navigator.share({title:"나의 성격 알아보기 | Big Five 모델 검사",text:"간편형: 60문항 / 정식형: 120문항",url:u});return}}catch(e){if(e&&e.name=="AbortError")return}try{await navigator.clipboard.writeText(u);toast("링크를 복사했어요. 붙여넣어 공유해 보세요.")}catch(e){prompt("아래 링크를 복사해 공유하세요",u)}}
 $$(".sh").forEach(b=>b.onclick=share);
 const rr=(g,x,y,w,h,r)=>{g.beginPath();g.roundRect?g.roundRect(x,y,w,h,r):g.rect(x,y,w,h)};
+const inApp=()=>/KAKAOTALK|NAVER\(inapp|Instagram|FBAN|FBAV|Line\/|DaumApps|; wv\)/i.test(navigator.userAgent||"");
 const isMob=()=>/Android|iPhone|iPad|iPod/i.test(navigator.userAgent||"")||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform||""));
 const wrap=(m,t,w)=>{const o=[];let l="";for(const ch of t){if(l&&m.measureText(l+ch).width>w){if(ch==" "){o.push(l);l="";continue}const i=l.lastIndexOf(" ");if(i>0){o.push(l.slice(0,i));l=l.slice(i+1)+ch}else{o.push(l);l=ch}}else l+=ch}if(l)o.push(l);return o};
 const FN=(w,s)=>`${w} ${s}px "Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif`;
@@ -245,15 +254,23 @@ y+=h+24});
 g.textAlign="center";g.fillStyle="#667";g.font=FN(700,32);g.fillText("[by JUNE]",W/2,y+44);const hu=/^https?:$/.test(location.protocol)?location.host+location.pathname.replace(/index\.html$/,""):"",d0=hu?128:86;g.font=FN(400,24);if(hu)g.fillText(hu,W/2,y+86);
 const dl=wrap(g,"※ NEO PI-R 자체가 아니라 그것을 대체하도록 만든 공개 검사이며, 규준표(백분위)가 없어 점수는 원점수와 비율로만 표시됩니다. 자기이해·참고용이며 임상 진단이나 선발 목적으로 사용할 수 없습니다.",880);
 dl.forEach((t,k)=>g.fillText(t,W/2,y+d0+k*34));return y+d0+dl.length*34+30}
-async function saveImg(){
+async function saveImg0(){
 const n=SEL.length,TXT="IPIP-NEO 성격 검사 나의 알아보기 Big Five 모델 결과 및 해석 높음 보통 낮음 점 영역 만점 평균적인 수준입니다 ※ by JUNE 0123456789[]()%|.,·–/"+D.map(d=>d[1]+d[2]).join("")+Object.values(DX).flat().join("")+Object.values(FT).join("")+"역채점 문항은 자동 반영되었으며 원점수를 환산한 값입니다 하위척도 점수는 높을수록 해당 특성이 강합니다 문항 평균이 이상이면 이하이면 그 사이는 표시한 안내이며 규준에 근거한 판정이 아닙니다 간편형은 하위척도당 문항이 개뿐이라 신뢰도가 낮습니다 중심으로 참고하고 세부 특성을 보려면 정식형을 권장합니다 NEO PI-R 자체가 아니라 그것을 대체하도록 만든 공개 검사이며 규준표 백분위 없어 비율로만 표시됩니다 자기이해 참고용이며 임상 진단이나 선발 목적으로 사용할 수 없습니다";
 try{await Promise.all([document.fonts.load('700 40px "Noto Sans KR"',TXT),document.fonts.load('400 30px "Noto Sans KR"',TXT)])}catch(e){}
 const W=1080,m=document.createElement("canvas").getContext("2d");
 const dry=new Proxy({},{get:(t,k)=>k=="measureText"?s=>m.measureText(s):k=="createLinearGradient"?()=>({addColorStop(){}}):()=>{},set:(t,k,v)=>{m[k]=v;return true}});
-const H=Math.ceil(paint(dry,W)),sc=Math.min(1,Math.sqrt(16e6/(W*H))),cv=document.createElement("canvas");cv.width=Math.round(W*sc);cv.height=Math.round(H*sc);const g=cv.getContext("2d");g.scale(sc,sc);g.fillStyle="#faf9f6";g.fillRect(0,0,W,H);paint(g,W);
-cv.toBlob(async b=>{const f=new File([b],`IPIP-NEO-${n}-result.png`,{type:"image/png"});
+const H=Math.ceil(paint(dry,W)),sc=Math.min(isMob()?.75:1,Math.sqrt(16e6/(W*H))),cv=document.createElement("canvas");cv.width=Math.round(W*sc);cv.height=Math.round(H*sc);const g=cv.getContext("2d");g.scale(sc,sc);g.fillStyle="#faf9f6";g.fillRect(0,0,W,H);paint(g,W);
+const b=await new Promise(r=>cv.toBlob(r,"image/png"));if(!b)throw new Error("blob");
+const f=new File([b],`IPIP-NEO-${n}-result.png`,{type:"image/png"});$("#toast").hidden=true;
 try{if(isMob()&&navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:"내 성격 검사 결과"});return}}catch(e){if(e&&e.name=="AbortError")return}
-const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=f.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);toast("이미지를 저장했어요.")},"image/png")}
+if(isMob()||inApp()){$("#ovi").src=cv.toDataURL("image/jpeg",.92);$("#ov").hidden=false;$("#ov").scrollTop=0;return}
+const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=f.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);toast("이미지를 저장했어요.")}
+let saving=0;
+async function saveImg(){if(saving)return;saving=1;toast("이미지를 만드는 중이에요…",0);try{await saveImg0()}catch(e){console.error(e);toast("이미지를 만들지 못했어요. Chrome·Safari 같은 기본 브라우저에서 다시 시도해 주세요.",4500)}saving=0}
+$("#ovc").onclick=()=>{$("#ov").hidden=true;$("#ovi").removeAttribute("src")};
+$("#pf").onclick=()=>inApp()?alert("앱 안에서는 PDF 저장이 지원되지 않아요. '내 결과 이미지로 저장'을 이용하거나, Chrome·Safari 같은 기본 브라우저에서 검사해 주세요."):print();
+$("#ex").onclick=()=>{const u=location.href.split("#")[0];if(/KAKAOTALK/i.test(navigator.userAgent||""))location.href="kakaotalk://web/openExternal?url="+encodeURIComponent(u);else alert("화면의 메뉴(⋮ 또는 공유 아이콘)에서 '다른 브라우저로 열기' 또는 'Safari에서 열기'를 선택해 주세요.")};
+if(inApp())$$(".iab").forEach(e=>e.hidden=false);
 $("#si").onclick=saveImg;
 const sc=n=>Q[n].k=="+"?A[n]:6-A[n];
 function fin(){D.forEach(([c,,fs])=>{FS[c]=fs.split(",").map((_,x)=>sum(SEL.filter(n=>Q[n].f==c+(x+1)).map(sc)));DT[c]=sum(FS[c])});$("#out").innerHTML=report();$("#res h1").innerHTML=IC.H+`IPIP-NEO-${SEL.length} 성격 검사`;document.body.className="rs";show("res")}
